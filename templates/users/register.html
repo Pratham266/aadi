@@ -1,0 +1,21 @@
+{% extends 'base.html' %}
+
+{% block content %}
+<div style="max-width: 400px; margin: 0 auto;">
+    <h2>Register</h2>
+    <form method="post" style="background: white; padding: 2rem; border-radius: 8px; box-shadow: 0 4px 6px rgba(0,0,0,0.1);">
+        {% csrf_token %}
+        {% for field in form %}
+            <div class="form-group">
+                <label for="{{ field.id_for_label }}" style="display: block; margin-bottom: 0.5rem;">{{ field.label }}</label>
+                {{ field }}
+                {% if field.errors %}
+                    <div style="color: red; font-size: 0.9rem;">{{ field.errors }}</div>
+                {% endif %}
+            </div>
+        {% endfor %}
+        <button type="submit" class="btn" style="width: 100%;">Register</button>
+    </form>
+    <p style="text-align: center; margin-top: 1rem;">Already have an account? <a href="{% url 'login' %}" style="color: var(--primary-color); font-weight: bold;">Login here</a></p>
+</div>
+{% endblock %}

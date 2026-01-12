@@ -1,0 +1,34 @@
+{% extends 'base.html' %}
+
+{% block content %}
+<h2>Checkout</h2>
+<div class="layout-with-sidebar">
+    <div style="flex: 2;">
+        <div class="cart-summary" style="text-align: left; margin-top: 0;">
+            <h3>Order Summary</h3>
+            <table class="cart-table">
+                {% for item in cart.items.all %}
+                <tr>
+                    <td>{{ item.product.name }} x {{ item.quantity }}</td>
+                    <td style="text-align: right;">${{ item.get_cost }}</td>
+                </tr>
+                {% endfor %}
+                <tr style="font-weight: bold; border-top: 2px solid #ddd;">
+                    <td>Total</td>
+                    <td style="text-align: right;">${{ cart.get_total_cost }}</td>
+                </tr>
+            </table>
+        </div>
+    </div>
+    <div style="flex: 1;">
+        <div class="cart-summary" style="margin-top: 0;">
+            <h3>Confirm Order</h3>
+            <p>You are about to place an order for ${{ cart.get_total_cost }}.</p>
+            <form method="post">
+                {% csrf_token %}
+                <button type="submit" class="btn" style="width: 100%;">Place Order</button>
+            </form>
+        </div>
+    </div>
+</div>
+{% endblock %}

@@ -1,0 +1,57 @@
+{% extends 'base.html' %}
+
+{% block content %}
+<h2>Your Cart</h2>
+{% if cart.items.all %}
+    <table class="cart-table">
+        <thead>
+            <tr>
+                <th>Product</th>
+                <th>Price</th>
+                <th>Quantity</th>
+                <th>Subtotal</th>
+                <th>Actions</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for item in cart.items.all %}
+            <tr>
+                <td>{{ item.product.name }}</td>
+                <td>${{ item.product.price }}</td>
+                <td>
+                    <div style="display: flex; gap: 0.5rem; align-items: center;">
+                        <form action="{% url 'cart_update' item.product.id %}" method="post" style="display:inline;">
+                            {% csrf_token %}
+                            <input type="hidden" name="action" value="decrease">
+                            <button type="submit" style="background:none;border:1px solid #ddd;cursor:pointer;padding:0.2rem 0.5rem;">-</button>
+                        </form>
+                        <span>{{ item.quantity }}</span>
+                        <form action="{% url 'cart_update' item.product.id %}" method="post" style="display:inline;">
+                            {% csrf_token %}
+                            <input type="hidden" name="action" value="increase">
+                            <button type="submit" style="background:none;border:1px solid #ddd;cursor:pointer;padding:0.2rem 0.5rem;">+</button>
+                        </form>
+                    </div>
+                </td>
+                <td>${{ item.get_cost }}</td>
+                <td>
+                    <form action="{% url 'cart_remove' item.product.id %}" method="post">
+                        {% csrf_token %}
+                        <button type="submit" class="btn btn-secondary" style="background: #e74c3c; color: white; border: none; padding: 0.5rem 1rem;">Remove</button>
+                    </form>
+                </td>
+            </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+    
+    <div class="cart-summary">
+        <h3>Total: ${{ cart.get_total_cost }}</h3>
+        <a href="{% url 'product_list' %}" class="btn btn-secondary">Continue Shopping</a>
+        <a href="{% url 'order_create' %}" class="btn">Proceed to Checkout</a>
+    </div>
+{% else %}
+    <p>Your cart is empty.</p>
+    <a href="{% url 'product_list' %}" class="btn">Start Shopping</a>
+{% endif %}
+{% endblock %}

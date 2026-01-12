@@ -1,0 +1,5 @@
+Django>=5.0
+PyMySQL
+cryptography
+Pillow
+python-dotenv
